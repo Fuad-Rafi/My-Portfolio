@@ -27,7 +27,6 @@ const Contact = () => {
             <div className="space-y-4">
               {[
                 { icon: Mail, label: "firafi75@gmail.com", href: null },
-                { icon: Phone, label: "+8801678385950", href: null },
                 { icon: Github, label: "github.com/Fuad-Rafi", href: "https://github.com/Fuad-Rafi" },
                 { icon: Linkedin, label: "linkedin.com/in/fuad-rafi", href: "https://linkedin.com/in/fuad-rafi" },
               ].map((item, i) => {
