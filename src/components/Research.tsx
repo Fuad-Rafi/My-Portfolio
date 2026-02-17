@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { ExternalLink, X, FileText } from "lucide-react";
+import thesisReport from "@/assets/Thesis Report.pdf";
 
 const Research = () => {
   const ref = useRef(null);
@@ -8,18 +9,18 @@ const Research = () => {
   const [showDetails, setShowDetails] = useState(false);
 
   const research = {
-    title: "Research Project",
-    tags: ["Research", "Analysis", "Documentation"],
-    desc: "Comprehensive research project with detailed analysis and findings.",
+    title: "Meta-Learning for Zero-Shot Skin Lesion Classification Across Unseen Smartphone Devices",
+    tags: ["Meta-Learning", "Deep Learning", "Computer Vision", "Healthcare AI", "Domain Adaptation"],
+    desc: "For my undergraduate thesis at BRAC University, I worked on building a deep learning system that can detect skin diseases from images even when the photos are taken using completely unseen smartphone devices. Most AI models perform well only on the same type of images they were trained on (for example, high-quality clinical dermoscopic images). However, in real-world telemedicine, patients use different smartphones under uncontrolled lighting conditions. This creates a major problem called domain shift, where model performance drops drastically. In this research, we applied meta-learning techniques (learning to learn) to train models that focus on disease-related patterns rather than device-specific artifacts. Under a strict zero-shot setup—meaning no smartphone images were used during training—our approach significantly improved robustness compared to traditional supervised learning. This work contributes toward building more reliable AI systems for real-world teledermatology deployment.",
     github: "https://github.com",
-    pdfReport: "#",
+    pdfReport: thesisReport,
     details: [
-      "In-depth research and analysis",
-      "Detailed methodology",
-      "Comprehensive findings",
-      "Data-driven insights",
-      "Complete documentation",
-      "Peer-reviewed results",
+      "Addresses domain shift problem in mobile teledermatology",
+      "Meta-learning (learning to learn) approach",
+      "Zero-shot evaluation on unseen smartphone devices",
+      "Focuses on disease patterns over device artifacts",
+      "Compared against traditional supervised learning",
+      "Improves real-world AI reliability for telemedicine deployment",
     ],
   };
 
@@ -67,12 +68,11 @@ const Research = () => {
               </a>
               <a
                 href={research.pdfReport}
-                target="_blank"
-                rel="noopener noreferrer"
+                download="Thesis Report.pdf"
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary text-primary font-medium hover:bg-primary/10 transition-colors"
               >
-                PDF Report <FileText size={16} />
+                Thesis Report <FileText size={16} />
               </a>
             </div>
           </motion.div>
@@ -117,11 +117,10 @@ const Research = () => {
               </a>
               <a
                 href={research.pdfReport}
-                target="_blank"
-                rel="noopener noreferrer"
+                download="Thesis Report.pdf"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary text-primary font-medium hover:bg-primary/10 transition-colors"
               >
-                Download PDF <FileText size={16} />
+                Download Thesis Report <FileText size={16} />
               </a>
             </div>
           </motion.div>
