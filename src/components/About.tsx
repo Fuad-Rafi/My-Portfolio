@@ -4,9 +4,9 @@ import { useRef } from "react";
 import { GraduationCap } from "lucide-react";
 
 const education = [
-  { degree: "BSc in Computer Science", school: "BRAC University", year: "2022 – 2026", grade: "CGPA 3.43" },
-  { degree: "HSC (Science)", school: "Higher Secondary", year: "2020", grade: "GPA 5.00" },
-  { degree: "SSC (Science)", school: "Secondary School", year: "2018", grade: "GPA 5.00" },
+  { degree: "BRAC University", school: "BSc in Computer Science ", year: "2022 – 2026", grade: "CGPA 3.43" },
+  { degree: "Birshreshtha Noor Mohammad Public Collage", school: "Higher Secondary", year: "2020", grade: "GPA 5.00" },
+  { degree: "Birshreshtha Noor Mohammad Public Collage", school: "Secondary School", year: "2018", grade: "GPA 5.00" },
 ];
 
 const About = () => {
