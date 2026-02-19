@@ -58,17 +58,14 @@ const Research = () => {
             </div>
             <div className="flex gap-3">
               <a
-                href={research.github}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#contact"
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
               >
                 GitHub <ExternalLink size={16} />
               </a>
               <a
-                href={research.pdfReport}
-                download="Thesis Report.pdf"
+                href="#contact"
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary text-primary font-medium hover:bg-primary/10 transition-colors"
               >
@@ -108,16 +105,13 @@ const Research = () => {
             </ul>
             <div className="flex gap-3">
               <a
-                href={research.github}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
               >
                 View on GitHub <ExternalLink size={16} />
               </a>
               <a
-                href={research.pdfReport}
-                download="Thesis Report.pdf"
+                href="#contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary text-primary font-medium hover:bg-primary/10 transition-colors"
               >
                 Download Thesis Report <FileText size={16} />
