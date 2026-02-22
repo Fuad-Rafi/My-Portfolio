@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { ExternalLink, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, ExternalLink, X } from "lucide-react";
 
 const projects = [
   {
@@ -8,6 +8,13 @@ const projects = [
     tags: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
     desc: "Full CRUD operations with a Node.js/Express REST API, MongoDB document modeling, React frontend with Tailwind CSS, scalable client-server architecture, and component reusability with routing.",
     github: "https://github.com/Fuad-Rafi/mern-book-store",
+    images: [
+      "/mern/Customer%20home.PNG",
+      "/mern/Order%20Now.PNG",
+      "/mern/Order%20dashboard.PNG",
+      "/mern/admin_home.PNG",
+      "/mern/Log%20in%20Admin%20anad%20customer.PNG",
+    ],
     details: [
       "Full CRUD operations",
       "Node.js/Express REST API",
@@ -22,6 +29,12 @@ const projects = [
     tags: ["Django", "Python", "Django ORM", "Authentication"],
     desc: "A blog platform with authentication, session handling, CRUD operations, Django ORM, backend–frontend integration, and deployment-ready architecture.",
     github: "https://github.com/Fuad-Rafi/Aniverse",
+    images: [
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+Landing+Page",
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+Post+Details",
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+Create+Post",
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+User+Dashboard",
+    ],
     details: [
       "Authentication & session handling",
       "CRUD operations",
@@ -35,6 +48,12 @@ const projects = [
     tags: ["Deep Learning", "VAE", "NLP", "Clustering", "Python"],
     desc: "Multimodal VAE combining audio spectrograms & lyric embeddings from 3835 clips across 600+ songs with missing-modality handling and advanced clustering evaluation.",
     github: "https://github.com/Fuad-Rafi/Multimodal-VAE-Music",
+    images: [
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Music+Clustering+-+Pipeline+Overview",
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Music+Clustering+-+Embedding+Space",
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Music+Clustering+-+Cluster+Visualization",
+      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Music+Clustering+-+Evaluation+Metrics",
+    ],
     details: [
       "Multimodal VAE combining audio spectrograms & lyric embeddings",
       "3835 clips from 600+ songs",
@@ -49,7 +68,60 @@ const projects = [
 const Projects = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-  const [selected, setSelected] = useState<number | null>(null);
+  const [activeSlideByProject, setActiveSlideByProject] = useState<Record<number, number>>({});
+  const [overlayImage, setOverlayImage] = useState<{ src: string; alt: string } | null>(null);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveSlideByProject((prev) => {
+        const next: Record<number, number> = { ...prev };
+
+        projects.forEach((project, projectIndex) => {
+          const current = prev[projectIndex] ?? 0;
+          next[projectIndex] = (current + 1) % project.images.length;
+        });
+
+        return next;
+      });
+    }, 3500);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (!overlayImage) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOverlayImage(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [overlayImage]);
+
+  const goToNextSlide = (projectIndex: number) => {
+    setActiveSlideByProject((prev) => {
+      const current = prev[projectIndex] ?? 0;
+      const total = projects[projectIndex].images.length;
+      return { ...prev, [projectIndex]: (current + 1) % total };
+    });
+  };
+
+  const goToPreviousSlide = (projectIndex: number) => {
+    setActiveSlideByProject((prev) => {
+      const current = prev[projectIndex] ?? 0;
+      const total = projects[projectIndex].images.length;
+      return { ...prev, [projectIndex]: (current - 1 + total) % total };
+    });
+  };
+
+  const goToSlide = (projectIndex: number, slideIndex: number) => {
+    setActiveSlideByProject((prev) => ({ ...prev, [projectIndex]: slideIndex }));
+  };
 
   return (
     <section id="projects" className="section-padding relative">
@@ -65,78 +137,126 @@ const Projects = () => {
             Featured <span className="gradient-text">Projects</span>
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="space-y-8">
             {projects.map((p, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.15 }}
-                className="glass-card-hover p-6 rounded-2xl cursor-pointer group"
-                onClick={() => setSelected(i)}
+                className="glass-card-hover p-6 md:p-8 rounded-2xl"
               >
-                <h3 className="font-display font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                  {p.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">{p.desc}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {p.tags.map((t) => (
-                    <span key={t} className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary">
-                      {t}
-                    </span>
-                  ))}
+                <div className="grid lg:grid-cols-2 gap-8 items-start">
+                  <div>
+                    <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground mb-4">
+                      {p.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-5">{p.desc}</p>
+
+                    <ul className="space-y-2.5 mb-6">
+                      {p.details.map((d, detailIndex) => (
+                        <li key={detailIndex} className="text-muted-foreground text-sm md:text-base flex gap-2">
+                          <span className="text-primary mt-1">•</span>
+                          <span>{d}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      {p.tags.map((t) => (
+                        <span key={t} className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <a
+                      href={p.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+                    >
+                      View on GitHub <ExternalLink size={14} />
+                    </a>
+                  </div>
+
+                  <div className="h-full min-h-[420px] md:min-h-[500px] flex flex-col">
+                    <div className="relative overflow-hidden rounded-xl border border-primary/20 bg-card/40 flex-1 min-h-[360px]">
+                      <img
+                        src={p.images[activeSlideByProject[i] ?? 0]}
+                        alt={`${p.title} screenshot ${(activeSlideByProject[i] ?? 0) + 1}`}
+                        className="w-full h-full object-cover cursor-zoom-in"
+                        loading="lazy"
+                        onClick={() =>
+                          setOverlayImage({
+                            src: p.images[activeSlideByProject[i] ?? 0],
+                            alt: `${p.title} screenshot ${(activeSlideByProject[i] ?? 0) + 1}`,
+                          })
+                        }
+                      />
+                      <button
+                        type="button"
+                        onClick={() => goToPreviousSlide(i)}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-background/70 border border-border flex items-center justify-center text-foreground hover:border-primary/40 transition-colors"
+                        aria-label="Previous project image"
+                      >
+                        <ChevronLeft size={18} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => goToNextSlide(i)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-background/70 border border-border flex items-center justify-center text-foreground hover:border-primary/40 transition-colors"
+                        aria-label="Next project image"
+                      >
+                        <ChevronRight size={18} />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-center gap-2 mt-4">
+                      {p.images.map((_, slideIndex) => (
+                        <button
+                          key={slideIndex}
+                          type="button"
+                          onClick={() => goToSlide(i, slideIndex)}
+                          className={`h-2.5 rounded-full transition-all ${
+                            (activeSlideByProject[i] ?? 0) === slideIndex
+                              ? "w-6 bg-primary"
+                              : "w-2.5 bg-muted-foreground/40 hover:bg-muted-foreground/70"
+                          }`}
+                          aria-label={`Go to image ${slideIndex + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <a
-                  href={p.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-                >
-                  GitHub <ExternalLink size={14} />
-                </a>
               </motion.div>
             ))}
           </div>
         </motion.div>
       </div>
 
-      {/* Modal */}
-      {selected !== null && (
+      {overlayImage && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelected(null)}
+          className="fixed inset-0 z-50 bg-background/90 backdrop-blur-md p-4 md:p-8 flex items-center justify-center"
+          onClick={() => setOverlayImage(null)}
         >
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="glass-card p-8 rounded-2xl max-w-lg w-full border border-primary/20 glow-box"
-            onClick={(e) => e.stopPropagation()}
+          <button
+            type="button"
+            onClick={() => setOverlayImage(null)}
+            className="absolute top-4 right-4 h-10 w-10 rounded-full bg-background/70 border border-border text-foreground hover:border-primary/40 flex items-center justify-center"
+            aria-label="Close image overlay"
           >
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="font-display text-xl font-bold text-foreground">{projects[selected].title}</h3>
-              <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground">
-                <X size={20} />
-              </button>
-            </div>
-            <ul className="space-y-2 mb-6">
-              {projects[selected].details.map((d, i) => (
-                <li key={i} className="text-muted-foreground text-sm flex gap-2">
-                  <span className="text-primary mt-1">•</span> {d}
-                </li>
-              ))}
-            </ul>
-            <a
-              href={projects[selected].github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
-            >
-              View on GitHub <ExternalLink size={16} />
-            </a>
-          </motion.div>
+            <X size={18} />
+          </button>
+
+          <img
+            src={overlayImage.src}
+            alt={overlayImage.alt}
+            className="max-w-full max-h-[88vh] object-contain rounded-lg border border-primary/20"
+            onClick={(event) => event.stopPropagation()}
+          />
         </motion.div>
       )}
     </section>
