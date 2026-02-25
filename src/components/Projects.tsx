@@ -2,12 +2,17 @@ import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink, X } from "lucide-react";
 
+const isVideoSlide = (slideSrc: string) => {
+  return slideSrc.toLowerCase().endsWith(".mp4");
+};
+
 const projects = [
   {
     title: "MERN Book Management Web Application",
     tags: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
     desc: "Full CRUD operations with a Node.js/Express REST API, MongoDB document modeling, React frontend with Tailwind CSS, scalable client-server architecture, and component reusability with routing.",
     github: "https://github.com/Fuad-Rafi/mern-book-store",
+    readmeLink: "https://github.com/Fuad-Rafi/mern-book-store/blob/master/README.md",
     images: [
       "/mern/Customer%20home.PNG",
       "/mern/Order%20Now.PNG",
@@ -29,11 +34,15 @@ const projects = [
     tags: ["Django", "Python", "Django ORM", "Authentication"],
     desc: "A blog platform with authentication, session handling, CRUD operations, Django ORM, backend–frontend integration, and deployment-ready architecture.",
     github: "https://github.com/Fuad-Rafi/Aniverse",
+    readmeLink: "https://github.com/Fuad-Rafi/Aniverse/blob/main/README.md",
     images: [
-      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+Landing+Page",
-      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+Post+Details",
-      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+Create+Post",
-      "https://placehold.co/1200x800/0f172a/6ee7b7?text=Django+Blog+-+User+Dashboard",
+      "/Aniverse/REGISTER.PNG",
+      "/Aniverse/inbox.PNG",
+      "/Aniverse/sEARCH.PNG",
+      "/Aniverse/Profile%20page.PNG",
+      "/Aniverse/YUSER%20PROFILE.PNG",
+      "/Aniverse/FRIEND.PNG",
+      "/Aniverse/ScreenRec_2026-02-25%2000-49-05.mp4",
     ],
     details: [
       "Authentication & session handling",
@@ -48,6 +57,7 @@ const projects = [
     tags: ["Deep Learning", "VAE", "NLP", "Clustering", "Python"],
     desc: "Multimodal VAE combining audio spectrograms & lyric embeddings from 3835 clips across 600+ songs with missing-modality handling and advanced clustering evaluation.",
     github: "https://github.com/Fuad-Rafi/Multimodal-VAE-Music",
+    readmeLink: "https://github.com/Fuad-Rafi/Multimodal-VAE-Music/blob/main/README.md",
     images: [
       "https://placehold.co/1200x800/0f172a/6ee7b7?text=Music+Clustering+-+Pipeline+Overview",
       "https://placehold.co/1200x800/0f172a/6ee7b7?text=Music+Clustering+-+Embedding+Space",
@@ -72,21 +82,32 @@ const Projects = () => {
   const [overlayImage, setOverlayImage] = useState<{ src: string; alt: string } | null>(null);
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
-      setActiveSlideByProject((prev) => {
-        const next: Record<number, number> = { ...prev };
+    const timers: number[] = [];
 
-        projects.forEach((project, projectIndex) => {
+    projects.forEach((project, projectIndex) => {
+      const slides = project.images;
+      if (slides.length === 0) {
+        return;
+      }
+
+      const activeSlideIndex = activeSlideByProject[projectIndex] ?? 0;
+      const activeSlideSrc = slides[activeSlideIndex];
+      const durationMs = isVideoSlide(activeSlideSrc) ? 10000 : 3500;
+
+      const timer = window.setTimeout(() => {
+        setActiveSlideByProject((prev) => {
           const current = prev[projectIndex] ?? 0;
-          next[projectIndex] = (current + 1) % project.images.length;
+          return {
+            ...prev,
+            [projectIndex]: (current + 1) % slides.length,
+          };
         });
+      }, durationMs);
+      timers.push(timer);
+    });
 
-        return next;
-      });
-    }, 3500);
-
-    return () => window.clearInterval(interval);
-  }, []);
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [activeSlideByProject]);
 
   useEffect(() => {
     if (!overlayImage) {
@@ -102,6 +123,10 @@ const Projects = () => {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [overlayImage]);
+
+  const goToSlide = (projectIndex: number, slideIndex: number) => {
+    setActiveSlideByProject((prev) => ({ ...prev, [projectIndex]: slideIndex }));
+  };
 
   const goToNextSlide = (projectIndex: number) => {
     setActiveSlideByProject((prev) => {
@@ -119,10 +144,6 @@ const Projects = () => {
     });
   };
 
-  const goToSlide = (projectIndex: number, slideIndex: number) => {
-    setActiveSlideByProject((prev) => ({ ...prev, [projectIndex]: slideIndex }));
-  };
-
   return (
     <section id="projects" className="section-padding relative">
       <div className="container mx-auto">
@@ -138,7 +159,12 @@ const Projects = () => {
           </h2>
 
           <div className="space-y-8">
-            {projects.map((p, i) => (
+            {projects.map((p, i) => {
+              const slides = p.images;
+              const activeSlide = activeSlideByProject[i] ?? 0;
+              const activeSlideSrc = slides[activeSlide] ?? "";
+
+              return (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
@@ -170,30 +196,49 @@ const Projects = () => {
                       ))}
                     </div>
 
-                    <a
-                      href={p.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-                    >
-                      View on GitHub <ExternalLink size={14} />
-                    </a>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <a
+                        href={p.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+                      >
+                        View on GitHub <ExternalLink size={14} />
+                      </a>
+                      <a
+                        href={p.readmeLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-9 px-3 rounded-md bg-primary/10 text-primary text-sm hover:bg-primary/20 transition-colors inline-flex items-center"
+                      >
+                        Features and details
+                      </a>
+                    </div>
                   </div>
 
                   <div className="h-full min-h-[420px] md:min-h-[500px] flex flex-col">
                     <div className="relative overflow-hidden rounded-xl border border-primary/20 bg-card/40 flex-1 min-h-[360px]">
-                      <img
-                        src={p.images[activeSlideByProject[i] ?? 0]}
-                        alt={`${p.title} screenshot ${(activeSlideByProject[i] ?? 0) + 1}`}
-                        className="w-full h-full object-cover cursor-zoom-in"
-                        loading="lazy"
-                        onClick={() =>
-                          setOverlayImage({
-                            src: p.images[activeSlideByProject[i] ?? 0],
-                            alt: `${p.title} screenshot ${(activeSlideByProject[i] ?? 0) + 1}`,
-                          })
-                        }
-                      />
+                      {isVideoSlide(activeSlideSrc) ? (
+                        <video
+                          src={activeSlideSrc}
+                          className="w-full h-full object-cover"
+                          controls
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img
+                          src={activeSlideSrc}
+                          alt={`${p.title} screenshot ${activeSlide + 1}`}
+                          className="w-full h-full object-cover cursor-zoom-in"
+                          loading="lazy"
+                          onClick={() =>
+                            setOverlayImage({
+                              src: activeSlideSrc,
+                              alt: `${p.title} screenshot ${activeSlide + 1}`,
+                            })
+                          }
+                        />
+                      )}
                       <button
                         type="button"
                         onClick={() => goToPreviousSlide(i)}
@@ -213,13 +258,13 @@ const Projects = () => {
                     </div>
 
                     <div className="flex items-center justify-center gap-2 mt-4">
-                      {p.images.map((_, slideIndex) => (
+                      {slides.map((_, slideIndex) => (
                         <button
                           key={slideIndex}
                           type="button"
                           onClick={() => goToSlide(i, slideIndex)}
                           className={`h-2.5 rounded-full transition-all ${
-                            (activeSlideByProject[i] ?? 0) === slideIndex
+                            activeSlide === slideIndex
                               ? "w-6 bg-primary"
                               : "w-2.5 bg-muted-foreground/40 hover:bg-muted-foreground/70"
                           }`}
@@ -230,7 +275,7 @@ const Projects = () => {
                   </div>
                 </div>
               </motion.div>
-            ))}
+            );})}
           </div>
         </motion.div>
       </div>
