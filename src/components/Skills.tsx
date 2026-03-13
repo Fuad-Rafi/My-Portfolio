@@ -11,17 +11,17 @@ const categories = [
   {
     icon: Code2,
     title: "Backend Development",
-    skills: ["Node.js", "Express", "Django", "Python", "REST APIs", "Git", "Back-end Architecture"],
+    skills: ["Node.js", "Express", "Django", "Python", "REST APIs", "API Orchestration", "Workflow Automation", "Git", "Back-end Architecture"],
   },
   {
     icon: Brain,
     title: "Machine Learning & AI",
-    skills: ["Deep Learning (VAE)", "NLP", "TensorFlow", "Scikit-learn", "Python", "Data Scraping", "Data Visualization"],
+    skills: ["Deep Learning (VAE)", "NLP", "LLM Integration", "Prompt Engineering", "Gemini API", "Grok API", "TensorFlow", "Scikit-learn", "Python", "Data Scraping", "Data Visualization"],
   },
   {
     icon: Database,
     title: "Databases & APIs",
-    skills: ["MongoDB", "REST APIs", "Database Design", "API Integration", "Data Modeling"],
+    skills: ["PostgreSQL", "SQLAlchemy", "MongoDB", "REST APIs", "Database Design", "API Integration", "Multi-API Pipeline", "Transcript Processing", "SMTP Automation", "Data Modeling"],
   },
   {
     icon: Users,
