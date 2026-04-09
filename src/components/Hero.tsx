@@ -26,7 +26,7 @@ const Hero = () => {
               Machine Learning Enthusiast & Full-Stack Developer
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-8 max-w-lg">
-              A Computer Science graduate from BRAC University with a strong passion for Machine Learning and Web Development. Experienced in Python, MERN stack, Django, and ML research projects including NLP and Deep Learning (VAE). Driven by continuous learning and innovation.
+              AI-focused Computer Science graduate building intelligent, real-world applications with LLMs, NLP, and modern full-stack technologies. Experienced in turning complex ideas into scalable, production-ready solutions.
             </p>
             <div className="flex flex-wrap gap-4">
               <a

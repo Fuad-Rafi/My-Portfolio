@@ -30,11 +30,9 @@ const About = () => {
           <div className="grid md:grid-cols-2 gap-12">
             <div>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Computer Science graduate from BRAC University (2022 – February 2026). Began with Python and strong foundations in Data Structures & Algorithms, expanded into JavaScript and C. Worked on Machine Learning, NLP, and full-stack applications using Django and MERN.
+                I am a Computer Science graduate from BRAC University, specializing in AI-driven applications and full-stack development. Experienced in building intelligent systems using LLMs, NLP, and RAG systems, alongside scalable web applications with the MERN stack and Django. Delivered real-world projects including AI-powered search, automation pipelines, and chat-based systems. Passionate about solving complex problems through practical, production-ready solutions. I have a strong foundation in Neural Networks, Reinforcement Learning, and Natural Language Processing through my academic coursework, along with hands-on research experience in machine learning and AI-driven systems.
               </p>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                I'm driven by the desire to create meaningful, impactful technology — whether it's building scalable web apps or developing cutting-edge ML models.
-              </p>
+              
               <div className="glass-card p-5 rounded-xl">
                 <h3 className="font-display font-semibold text-foreground mb-2">Personal Interests</h3>
                 <p className="text-muted-foreground text-sm">
